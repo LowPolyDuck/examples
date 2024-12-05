@@ -1,6 +1,6 @@
 {
   "cluster": "dev",
-  "namespace": "uniswap-v2-events-from-all-contracts-with-usd-price-dev",
+  "namespace": "dumpyswap-dev",
   "indexers": [
     {
       "chainId": 1,
@@ -13,13 +13,13 @@
       ]
     },
     {
-      "chainId": 5,
+      "chainId": 31611,
       "enabled": false,
       "ingestionFilterGroup": "default",
       "processingFilterGroup": "default",
       "sources": [
-        "wss://chain-5.rpc.internal.flair.build",
-        "https://chain-5.rpc.internal.flair.build"
+        "wss://rpc.test.mezo.org",
+        "https://rpc.test.mezo.org"
       ]
     }
   ]

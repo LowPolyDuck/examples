@@ -32,14 +32,14 @@ indexers:
   {{#indexers}}
   - chainId: {{chainId}}
     enabled: {{enabled}}
-    ingestionFilterGroup: {{ingestionFilterGroup}}
-    processingFilterGroup: {{processingFilterGroup}}
+    ingestionFilterGroup: topics
+    processingFilterGroup: addresses
+    defaultBackfillStartBlock: 523168
+    emitEvents: true
     sources:
     {{#sources}}
       - endpoint: {{{.}}}
     {{/sources}}
-    ingestionFilterGroup: topics
-    processingFilterGroup: addresses
   {{/indexers}}
 
 processors:
@@ -53,9 +53,12 @@ processors:
 
 enrichers:
   - id: pools-aggregations
+    engine: rockset
+    inputSql: src/processors/pools-aggregations/input.sql
     handler: src/processors/pools-aggregations/handler.ts
 
 workers:
   - schedule: rate(60 minutes)
+    enabled: true
     inputSql: src/processors/pools-aggregations/input.sql
     enricher: pools-aggregations

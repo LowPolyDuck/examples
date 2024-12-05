@@ -1,45 +1,70 @@
 manifest: 1.2.0
 
-defaultLogLevel: DEBUG
+defaultLogLevel: INFO
 
 cluster:
-  id: dev
+  id: prod
   size: small
-namespace: health-factor-with-factory-tracking-dev
+namespace: dumpyswap-prod
 
 filterGroups:
-  - id: default
+  - id: topics
+    updateStrategy: replace
+    description: |
+      This static filter group is used for all indexers to capture all relevant events.
+    topics:
+      - fromFile: ./src/processors/factory-tracker/abi.json
+      - fromFile: ./src/processors/pools-swaps/abi.json
+
+  - id: addresses
     updateStrategy: preserve
     description: |
-      This group contains all factories and vaults addresses that are being tracked.
-      Factories will be imported from CSV, then newly deployed pools will be added
-      using custom processor below (factory-tracker).
+      This group will be automatically populated by the factory-tracker as soon as a new pool is created.
+      It is also manually populated from the factories.csv for known factories.
+      This group is used to filter-out irrelevant contracts (other Uniswap-like protocols) which also emit the "topics" above but we don't want to process them.
+      If you want swap of "all" Uniswap-like protocols, you can remove this filter group and use "topics" filter group everywhere. 
     addresses:
       - fromFile: ./factories.csv
+      - chainId: '*'
+        address: '*'
 
 indexers:
-  - chainId: 10
-    enabled: true
-    ingestionFilterGroup: default
-    processingFilterGroup: default
+  - chainId: 1
+    enabled: false
+    ingestionFilterGroup: topics
+    processingFilterGroup: addresses
+    defaultBackfillStartBlock: 523168
+    emitEvents: true
     sources:
-      - endpoint: wss://chain-10.rpc.internal.flair.build
-      - endpoint: https://chain-10.rpc.internal.flair.build
+      - endpoint: wss://chain-1.rpc.internal.flair.build
+      - endpoint: https://chain-1.rpc.internal.flair.build
+  - chainId: 31611
+    enabled: true
+    ingestionFilterGroup: topics
+    processingFilterGroup: addresses
+    defaultBackfillStartBlock: 523168
+    emitEvents: true
+    sources:
+      - endpoint: wss://rpc.test.mezo.org
+      - endpoint: https://rpc.test.mezo.org
 
 processors:
   - id: factory-tracker
-    handler: src/processors/factory-tracker/handler.ts
     abi: src/processors/factory-tracker/abi.json
+    handler: src/processors/factory-tracker/handler.ts
 
-  - id: erc4626-events
-    handler: src/processors/erc4626-events/handler.ts
-    abi: src/processors/erc4626-events/abi.json
-
-workers:
-  - schedule: rate(15 minutes)
-    input_sql: src/processors/position-health/input.sql
-    enricher: calculate-position-health
+  - id: pools-swaps
+    abi: src/processors/pools-swaps/abi.json
+    handler: src/processors/pools-swaps/handler.ts
 
 enrichers:
-  - id: calculate-position-health
-    handler: src/processors/position-health/handler.ts
+  - id: pools-aggregations
+    engine: rockset
+    inputSql: src/processors/pools-aggregations/input.sql
+    handler: src/processors/pools-aggregations/handler.ts
+
+workers:
+  - schedule: rate(60 minutes)
+    enabled: true
+    inputSql: src/processors/pools-aggregations/input.sql
+    enricher: pools-aggregations

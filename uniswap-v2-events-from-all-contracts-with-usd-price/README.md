@@ -141,7 +141,7 @@ query {
     FROM
         entities
     WHERE
-        namespace = 'my-awesome-swapper'
+        namespace = 'dumpyswap-prod'
     GROUP BY entityType
     """
   ) {
@@ -169,7 +169,7 @@ query {
       FROM
         entities
       WHERE
-        namespace = 'my-awesome-swapper' AND
+        namespace = 'dumpyswap-prod' AND
         entityType = 'Pool' AND
         last7DVolumeUsd IS NOT NULL
       ORDER BY last7DVolumeUsd DESC

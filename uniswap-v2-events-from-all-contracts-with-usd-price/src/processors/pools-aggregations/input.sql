@@ -9,7 +9,7 @@ last1HData AS (
     FROM
         entities
     WHERE
-        namespace = 'my-awesome-swapper'
+        namespace = 'dumpyswap-prod'
         AND entityType = 'Swap'
         AND poolId IS NOT NULL
         AND blockTimestamp >= UNIX_SECONDS(CURRENT_TIMESTAMP() - HOURS(1))
@@ -25,7 +25,7 @@ last1DData AS (
     FROM
         entities
     WHERE
-        namespace = 'my-awesome-swapper'
+        namespace = 'dumpyswap-prod'
         AND entityType = 'Swap'
         AND blockTimestamp >= UNIX_SECONDS(CURRENT_TIMESTAMP() - DAYS(1))
     GROUP BY poolId
@@ -40,7 +40,7 @@ last7DData AS (
     FROM
         entities
     WHERE
-        namespace = 'my-awesome-swapper'
+        namespace = 'dumpyswap-prod'
         AND entityType = 'Swap'
         AND blockTimestamp >= UNIX_SECONDS(CURRENT_TIMESTAMP() - DAYS(7))
     GROUP BY poolId
@@ -55,7 +55,7 @@ last30DData AS (
     FROM
         entities
     WHERE
-        namespace = 'my-awesome-swapper'
+        namespace = 'dumpyswap-prod'
         AND entityType = 'Swap'
         AND blockTimestamp >= UNIX_SECONDS(CURRENT_TIMESTAMP() - DAYS(30))
     GROUP BY poolId
@@ -69,7 +69,7 @@ prev1HData AS (
     FROM
         entities
     WHERE
-        namespace = 'my-awesome-swapper'
+        namespace = 'dumpyswap-prod'
         AND entityType = 'Swap'
         AND poolId IS NOT NULL
         AND blockTimestamp < UNIX_SECONDS(CURRENT_TIMESTAMP() - HOURS(1))
@@ -85,7 +85,7 @@ prev1DData AS (
     FROM
         entities
     WHERE
-        namespace = 'my-awesome-swapper'
+        namespace = 'dumpyswap-prod'
         AND entityType = 'Swap'
         AND blockTimestamp < UNIX_SECONDS(CURRENT_TIMESTAMP() - DAYS(1))
         AND blockTimestamp >= UNIX_SECONDS(CURRENT_TIMESTAMP() - DAYS(2))
@@ -100,7 +100,7 @@ prev7DData AS (
     FROM
         entities
     WHERE
-        namespace = 'my-awesome-swapper'
+        namespace = 'dumpyswap-prod'
         AND entityType = 'Swap'
         AND blockTimestamp < UNIX_SECONDS(CURRENT_TIMESTAMP() - DAYS(7))
         AND blockTimestamp >= UNIX_SECONDS(CURRENT_TIMESTAMP() - DAYS(7))
@@ -115,7 +115,7 @@ prev30DData AS (
     FROM
         entities
     WHERE
-        namespace = 'my-awesome-swapper'
+        namespace = 'dumpyswap-prod'
         AND entityType = 'Swap'
         AND blockTimestamp < UNIX_SECONDS(CURRENT_TIMESTAMP() - DAYS(30))
         AND blockTimestamp >= UNIX_SECONDS(CURRENT_TIMESTAMP() - DAYS(60))

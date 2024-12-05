@@ -1,10 +1,10 @@
 {
   "cluster": "prod",
-  "namespace": "uniswap-v2-events-from-all-contracts-with-usd-price-prod",
+  "namespace": "dumpyswap-prod",
   "indexers": [
     {
       "chainId": 1,
-      "enabled": true,
+      "enabled": false,
       "ingestionFilterGroup": "default",
       "processingFilterGroup": "default",
       "sources": [
@@ -13,13 +13,13 @@
       ]
     },
     {
-      "chainId": 5,
+      "chainId": 31611,
       "enabled": true,
       "ingestionFilterGroup": "default",
       "processingFilterGroup": "default",
       "sources": [
-        "wss://chain-5.rpc.internal.flair.build",
-        "https://chain-5.rpc.internal.flair.build"
+        "wss://rpc.test.mezo.org",
+        "https://rpc.test.mezo.org"
       ]
     }
   ]
