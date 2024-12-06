@@ -3,7 +3,7 @@ manifest: 1.2.0
 defaultLogLevel: INFO
 
 cluster:
-  id: dev
+  id: prod
   size: small
 namespace: dumpyswap-prod
 
